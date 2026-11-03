@@ -99,3 +99,6 @@ h2::after{content:"";display:block;width:56px;height:5px;border-radius:4px;backg
 .btn-ig{background:linear-gradient(45deg,#f58529,#dd2a7b,#8134af,#515bd4);color:#fff}
 footer{border-top:4px solid var(--g)}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
+
+.thumb{width:100%;aspect-ratio:16/10;object-fit:cover;border-radius:12px;margin-bottom:12px;background:var(--alt)}
+.ava{width:56px;height:56px;border-radius:50%;object-fit:cover;margin-bottom:10px}

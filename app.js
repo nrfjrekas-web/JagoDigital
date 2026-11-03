@@ -3,9 +3,9 @@ const IC=['<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M1
 // ===== Data yang dikelola pemilik (isi bila sudah benar & disetujui) =====
 const WA="6289601793889";
 const APPS_SCRIPT_URL=""; // URL Web App Google Apps Script untuk simpan ke Spreadsheet
-const PORTFOLIO=[]; // {nama,kategori,deskripsi,teknologi:[],demo}
+const PORTFOLIO=[]; // {nama,kategori,deskripsi,teknologi:[],demo,gambar:"assets/nama.webp"} (demo & gambar opsional)
 const PACKAGES=[];  // {nama,harga,deskripsi,fitur:[],estimasi,unggulan}
-const TESTIMONIALS=[]; // hanya yang sudah disetujui admin & pelanggan
+const TESTIMONIALS=[]; // {nama,usaha,isi,rating,foto} hanya yang disetujui (rating & foto opsional)
 const CATS=["Website Bisnis","Website Sekolah","Sistem Informasi","Aplikasi Administrasi","E-Commerce","Website Organisasi"];
 const SERVICES=[
 ["Website Bisnis dan Organisasi","Website resmi untuk usaha, komunitas, dan organisasi Anda.",["Halaman profil dan layanan","Tampilan responsif","Tombol WhatsApp"]],
@@ -42,14 +42,14 @@ let cat="Semua";
 function drawCats(){$("#cats").innerHTML=["Semua",...CATS].map(c=>`<button class="chip" aria-pressed="${c===cat}" data-c="${esc(c)}">${esc(c)}</button>`).join("")}
 function drawPf(){const q=$("#q").value.toLowerCase().trim();
 const r=PORTFOLIO.filter(p=>(cat==="Semua"||p.kategori===cat)&&p.nama.toLowerCase().includes(q));
-$("#pf").innerHTML=r.length?r.map(p=>`<article class="card"><span class="pill">${esc(p.kategori)}</span><h3 style="margin-top:10px">${esc(p.nama)}</h3><p>${esc(p.deskripsi)}</p><p>${(p.teknologi||[]).map(t=>`<span class="pill">${esc(t)}</span>`).join(" ")}</p>${p.demo?`<div class="act"><a class="btn btn-o btn-s" target="_blank" rel="noopener" href="${esc(p.demo)}">Lihat Demo</a></div>`:""}</article>`).join(""):
+$("#pf").innerHTML=r.length?r.map(p=>`<article class="card">${p.gambar?`<img class="thumb" src="${esc(p.gambar)}" alt="Tampilan proyek ${esc(p.nama)}" loading="lazy">`:""}<span class="pill">${esc(p.kategori)}</span><h3 style="margin-top:10px">${esc(p.nama)}</h3><p>${esc(p.deskripsi)}</p><p>${(p.teknologi||[]).map(t=>`<span class="pill">${esc(t)}</span>`).join(" ")}</p>${p.demo?`<div class="act"><a class="btn btn-o btn-s" target="_blank" rel="noopener" href="${esc(p.demo)}">Lihat Demo</a></div>`:""}</article>`).join(""):
 `<div class="empty"><b>${PORTFOLIO.length?"Tidak ada proyek yang cocok.":"Portofolio sedang disiapkan."}</b><p>${PORTFOLIO.length?"Coba kata kunci atau kategori lain.":"Ingin melihat contoh pekerjaan? Minta lewat WhatsApp."}</p>${PORTFOLIO.length?"":`<a class="btn btn-o btn-s" target="_blank" rel="noopener" href="${wa("Halo JagoDigital, saya ingin melihat contoh portofolio Anda.")}">Minta contoh via WhatsApp</a>`}</div>`}
 $("#cats").onclick=e=>{const b=e.target.closest("[data-c]");if(b){cat=b.dataset.c;drawCats();drawPf()}};$("#q").oninput=drawPf;drawCats();drawPf();
 // harga
 $("#pk").innerHTML=PACKAGES.length?PACKAGES.map(p=>`<article class="card" ${p.unggulan?'style="border-color:var(--g);border-width:2px"':""}>${p.unggulan?'<span class="pill">Unggulan</span>':""}<h3>${esc(p.nama)}</h3><p style="font-size:1.6rem;font-weight:800;color:var(--ink);margin:0">${esc(p.harga)}</p><p>${esc(p.deskripsi)}</p><ul>${p.fitur.map(f=>`<li>${esc(f)}</li>`).join("")}</ul><p><b>Estimasi:</b> ${esc(p.estimasi)}</p><div class="act"><a class="btn btn-g btn-s" target="_blank" rel="noopener" href="${wa(`Halo JagoDigital, saya ingin memesan paket ${p.nama}.`)}">Pesan Sekarang</a></div></article>`).join(""):
 `<div class="empty"><b>Harga disesuaikan kebutuhan</b><p>Paket dan harga resmi akan ditampilkan di sini. Sementara itu, minta penawaran lewat WhatsApp.</p><a class="btn btn-g btn-s" target="_blank" rel="noopener" href="${wa("Halo JagoDigital, saya ingin meminta penawaran harga pembuatan website.")}">Minta Penawaran</a></div>`;
 // testimoni
-if(TESTIMONIALS.length){$("#testi").hidden=false;$("#tt").innerHTML=TESTIMONIALS.map(t=>`<article class="card"><p>“${esc(t.isi)}”</p><b>${esc(t.nama)}</b><span class="pill">${esc(t.usaha)}</span><p>${"★".repeat(t.rating||0)}</p></article>`).join("")}
+if(TESTIMONIALS.length){$("#testi").hidden=false;$("#navt").hidden=false;$("#tt").innerHTML=TESTIMONIALS.map(t=>`<article class="card">${t.foto?`<img class="ava" src="${esc(t.foto)}" alt="${esc(t.nama)}" loading="lazy">`:""}<p>“${esc(t.isi)}”</p><b>${esc(t.nama)}</b><span class="pill">${esc(t.usaha)}</span><p>${"★".repeat(t.rating||0)}</p></article>`).join("")}
 // faq
 $("#fq").innerHTML=FAQ.map(f=>`<details><summary>${esc(f[0])}</summary><p>${esc(f[1])}</p></details>`).join("");
 // form
